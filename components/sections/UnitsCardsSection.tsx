@@ -206,20 +206,21 @@ export function UnitsCardsSection({ project }: { project: ProjectContent }) {
             aria-labelledby="unit-modal-title"
           >
             <div
-              className="relative bg-white rounded-t-3xl sm:rounded-3xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+              className="relative bg-white rounded-t-3xl sm:rounded-3xl shadow-xl max-w-md w-full overflow-y-auto overflow-x-hidden [-webkit-overflow-scrolling:touch] pb-[env(safe-area-inset-bottom,0px)]"
+              style={{ maxHeight: "min(85dvh, calc(100vh - 80px))" }}
               onClick={(e) => e.stopPropagation()}
             >
-            {/* Close button — top left, visible */}
+            {/* Close button — 44px min touch target, top-left */}
             <button
               type="button"
               onClick={() => setSelectedUnit(null)}
-              className="absolute top-3 left-3 z-10 w-10 h-10 rounded-full bg-white/95 shadow-md border border-navy/10 flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors"
+              className="absolute top-3 left-3 z-10 w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-white/95 shadow-md border border-navy/10 flex items-center justify-center text-navy hover:bg-navy hover:text-white active:bg-navy/10 touch-manipulation"
               aria-label="إغلاق"
             >
               <X size={22} strokeWidth={2.5} />
             </button>
-            {/* Unit photo — smaller */}
-            <div className="relative w-full h-36 sm:h-44 rounded-t-3xl overflow-hidden bg-gradient-to-br from-navy/10 to-navy/5">
+            {/* Unit photo */}
+            <div className="relative w-full h-32 sm:h-44 rounded-t-3xl overflow-hidden bg-gradient-to-br from-navy/10 to-navy/5">
               {!modalImageError ? (
                 <Image
                   src={UNIT_IMAGES[selectedUnit - 1]}
@@ -236,11 +237,11 @@ export function UnitsCardsSection({ project }: { project: ProjectContent }) {
                 </span>
               )}
             </div>
-            <div className="p-6 md:p-8">
-              <h2 id="unit-modal-title" className="text-xl font-bold text-navy mb-6">
+            <div className="p-4 sm:p-6 md:p-8 pt-14 sm:pt-6">
+              <h2 id="unit-modal-title" className="text-lg sm:text-xl font-bold text-navy mb-4 sm:mb-6">
                 {UNIT_TITLES[selectedUnit]}
               </h2>
-              <dl className="space-y-3 text-navy">
+              <dl className="space-y-2.5 sm:space-y-3 text-navy text-sm sm:text-base">
                 <div>
                   <dt className="text-muted text-sm">المشروع</dt>
                   <dd className="font-medium">{unit.project}</dd>
@@ -270,21 +271,21 @@ export function UnitsCardsSection({ project }: { project: ProjectContent }) {
                   <dd className="font-medium">{unit.downPayment}</dd>
                 </div>
               </dl>
-              <div className="mt-8 flex flex-col sm:flex-row gap-3">
+              <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3">
                 <a
                   href={telUrl}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-navy text-white py-3 px-5 font-medium hover:bg-navy/90 transition-colors"
+                  className="min-h-[48px] inline-flex items-center justify-center gap-2 rounded-xl bg-navy text-white py-3.5 px-5 font-medium hover:bg-navy/90 active:opacity-90 transition-colors touch-manipulation"
                 >
-                  <Phone size={20} />
+                  <Phone size={20} aria-hidden />
                   اتصال
                 </a>
                 <a
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] text-white py-3 px-5 font-medium hover:bg-[#20bd5a] transition-colors"
+                  className="min-h-[48px] inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] text-white py-3.5 px-5 font-medium hover:bg-[#20bd5a] active:opacity-90 transition-colors touch-manipulation"
                 >
-                  <MessageCircle size={20} />
+                  <MessageCircle size={20} aria-hidden />
                   واتساب
                 </a>
               </div>

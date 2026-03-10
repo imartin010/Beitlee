@@ -39,29 +39,29 @@ function MasterplanModal({ onClose }: { onClose: () => void }) {
         exit={{ y: "100%" }}
         transition={{ type: "tween", duration: 0.32, ease: [0.25, 0.1, 0.25, 1] }}
         className="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl w-full max-w-4xl flex flex-col border-t border-navy/10 overflow-hidden"
-        style={{ maxHeight: "calc(100vh - 76px - env(safe-area-inset-bottom, 0px))" }}
+        style={{ maxHeight: "min(calc(100dvh - 76px), calc(100vh - 76px))" }}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal
         aria-label="خريطة المشروع"
       >
-        {/* header — white */}
-        <div className="flex items-center justify-between shrink-0 px-4 sm:px-6 py-3 border-b border-navy/10 bg-white">
-          <h2 className="text-xl font-bold text-navy">
+        {/* header — white, mobile-friendly touch targets */}
+        <div className="flex items-center justify-between shrink-0 px-4 sm:px-6 py-3 min-h-14 border-b border-navy/10 bg-white">
+          <h2 className="text-lg sm:text-xl font-bold text-navy truncate flex-1 min-w-0 mr-3">
             خريطة المشروع
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="w-9 h-9 rounded-full flex items-center justify-center text-navy/70 hover:text-navy hover:bg-navy/10 transition-colors"
+            className="shrink-0 w-11 h-11 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center text-navy/70 hover:text-navy active:bg-navy/15 bg-navy/5 touch-manipulation"
             aria-label="إغلاق"
           >
-            <X size={20} strokeWidth={2} />
+            <X size={22} strokeWidth={2} />
           </button>
         </div>
 
-        {/* image */}
-        <div className="flex-1 min-h-0 overflow-auto overscroll-contain bg-navy/5">
+        {/* image — smooth scroll on iOS */}
+        <div className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto overscroll-contain bg-navy/5 [-webkit-overflow-scrolling:touch]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/Map.png"
