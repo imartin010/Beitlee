@@ -1,61 +1,51 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
+import { isValidEgyptPhone, normalizeEgyptPhone } from "@/lib/validation";
+import type { LeadFormPayload } from "@/types/lead";
 
-const EGYPT_PHONE_REGEX = /^(\+20|0)?1[0-2,5]{1}[0-9]{8}$/;
+function parseBody(body: unknown): LeadFormPayload | null {
+  if (body == null || typeof body !== "object") return null;
+  const o = body as Record<string, unknown>;
+  const project_slug = typeof o.project_slug === "string" ? o.project_slug.trim() : "";
+  const name = typeof o.name === "string" ? o.name.trim() : "";
+  const phone = typeof o.phone === "string" ? o.phone : "";
+  if (!project_slug || !name || !phone) return null;
+  return {
+    project_slug,
+    name,
+    phone,
+    email: typeof o.email === "string" && o.email.trim() ? o.email.trim() : undefined,
+    notes: typeof o.notes === "string" && o.notes.trim() ? o.notes.trim() : undefined,
+    source: typeof o.source === "string" && o.source.trim() ? o.source.trim() : undefined,
+  };
+}
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const {
-      project_slug,
-      name,
-      phone,
-      email,
-      notes,
-      source,
-    } = body as {
-      project_slug?: string;
-      name?: string;
-      phone?: string;
-      email?: string;
-      notes?: string;
-      source?: string;
-    };
-
-    if (!project_slug || typeof project_slug !== "string" || !project_slug.trim()) {
-      return NextResponse.json(
-        { message: "project_slug is required" },
-        { status: 400 }
-      );
+    const payload = parseBody(body);
+    if (!payload) {
+      return NextResponse.json({ message: "project_slug is required" }, { status: 400 });
     }
-    if (!name || typeof name !== "string" || !name.trim()) {
-      return NextResponse.json(
-        { message: "الاسم مطلوب" },
-        { status: 400 }
-      );
+    if (!payload.name) {
+      return NextResponse.json({ message: "الاسم مطلوب" }, { status: 400 });
     }
-    if (!phone || typeof phone !== "string") {
-      return NextResponse.json(
-        { message: "رقم الهاتف مطلوب" },
-        { status: 400 }
-      );
-    }
-    const normalizedPhone = phone.replace(/\s/g, "");
-    if (!EGYPT_PHONE_REGEX.test(normalizedPhone)) {
+    if (!isValidEgyptPhone(payload.phone)) {
       return NextResponse.json(
         { message: "رقم هاتف مصري صحيح مطلوب" },
         { status: 400 }
       );
     }
 
+    const normalizedPhone = normalizeEgyptPhone(payload.phone);
     const supabase = createServerClient();
     const { error } = await supabase.from("leads").insert({
-      project_slug: project_slug.trim(),
-      name: name.trim(),
+      project_slug: payload.project_slug,
+      name: payload.name,
       phone: normalizedPhone,
-      email: typeof email === "string" && email.trim() ? email.trim() : null,
-      notes: typeof notes === "string" && notes.trim() ? notes.trim() : null,
-      source: typeof source === "string" && source.trim() ? source.trim() : null,
+      email: payload.email ?? null,
+      notes: payload.notes ?? null,
+      source: payload.source ?? null,
     });
 
     if (error) {

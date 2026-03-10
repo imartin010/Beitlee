@@ -1,7 +1,6 @@
 "use client";
 
-import { buildWhatsAppUrl } from "@/lib/utils";
-import { cn } from "@/lib/utils";
+import { buildProjectWhatsAppUrl, buildWhatsAppUrl, cn } from "@/lib/utils";
 
 interface StickyMobileCTAProps {
   whatsappNumber: string;
@@ -14,10 +13,9 @@ export function StickyMobileCTA({
   ctaText,
   projectName,
 }: StickyMobileCTAProps) {
-  const whatsappUrl = buildWhatsAppUrl(
-    whatsappNumber,
-    projectName ? `مرحباً، أريد الاستفسار عن مشروع ${projectName}` : undefined
-  );
+  const whatsappUrl = projectName
+    ? buildProjectWhatsAppUrl({ whatsappNumber, projectName }, "inquiry")
+    : buildWhatsAppUrl(whatsappNumber);
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-background/95 backdrop-blur border-t border-navy/10 md:hidden">

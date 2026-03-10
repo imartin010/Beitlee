@@ -1,6 +1,7 @@
 "use client";
 
 import type { ProjectContent } from "@/types/project";
+import type { NextSearchParams } from "@/types/next";
 import { MinimalHeader } from "@/components/layout/MinimalHeader";
 import { MinimalFooter } from "@/components/layout/MinimalFooter";
 import { StickyMobileCTA } from "@/components/layout/StickyMobileCTA";
@@ -15,7 +16,7 @@ import { FinalCTASection } from "@/components/sections/FinalCTASection";
 
 interface LandingPageTemplateProps {
   project: ProjectContent;
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: NextSearchParams;
 }
 
 /**

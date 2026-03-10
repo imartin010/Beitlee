@@ -3,7 +3,8 @@
 import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Button } from "@/components/ui/Button";
-import { buildWhatsAppUrl } from "@/lib/utils";
+import { buildProjectWhatsAppUrl } from "@/lib/utils";
+import { fadeInUp } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
 
 interface FinalCTASectionProps {
@@ -11,17 +12,14 @@ interface FinalCTASectionProps {
 }
 
 export function FinalCTASection({ project }: FinalCTASectionProps) {
-  const whatsappUrl = buildWhatsAppUrl(
-    project.whatsappNumber,
-    `مرحباً، أريد الحجز أو الاستفسار عن مشروع ${project.projectName}`
-  );
+  const whatsappUrl = buildProjectWhatsAppUrl(project, "booking");
 
   return (
     <SectionWrapper className="py-20">
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        initial={fadeInUp.initial}
+        whileInView={fadeInUp.animate}
+        viewport={fadeInUp.viewport}
         className="max-w-2xl mx-auto text-center p-10 rounded-2xl bg-navy text-white"
       >
         <h2 className="text-2xl font-bold mb-3">

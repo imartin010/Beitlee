@@ -59,15 +59,15 @@ lib/supabase.ts        # Supabase client (browser + server)
 ## How to Add a New Landing Page
 
 1. **Create content file**  
-   Copy `content/projects/mountainview.ts` to e.g. `content/projects/tajcity.ts`. Fill in all fields (slug, projectName, headline, pricing, FAQs, etc.).
+   Copy `content/projects/mountainview.ts` to e.g. `content/projects/tajcity.ts`. Export as `export const content: ProjectContent = { ... }` (slug = filename). Fill in all fields.
 
 2. **Register the project**  
    In `content/projects/index.ts`, import the new content and add it to the `projects` object:
    ```ts
-   import { tajCityContent } from "./tajcity";
+   import { content as tajcity } from "./tajcity";
    const projects = {
-     mountainview: mountainViewContent,
-     tajcity: tajCityContent,
+     mountainview,
+     tajcity,
    };
    ```
 

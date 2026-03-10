@@ -3,7 +3,8 @@
 import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Button } from "@/components/ui/Button";
-import { buildWhatsAppUrl } from "@/lib/utils";
+import { buildProjectWhatsAppUrl } from "@/lib/utils";
+import { fadeInUp } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
 
 interface PricingSectionProps {
@@ -11,17 +12,14 @@ interface PricingSectionProps {
 }
 
 export function PricingSection({ project }: PricingSectionProps) {
-  const whatsappUrl = buildWhatsAppUrl(
-    project.whatsappNumber,
-    `مرحباً، أريد معرفة تفاصيل الأسعار والتقسيط لمشروع ${project.projectName}`
-  );
+  const whatsappUrl = buildProjectWhatsAppUrl(project, "pricing");
 
   return (
     <SectionWrapper id="pricing">
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        initial={fadeInUp.initial}
+        whileInView={fadeInUp.animate}
+        viewport={fadeInUp.viewport}
         className="max-w-2xl mx-auto text-center p-8 rounded-2xl bg-white border border-navy/10 shadow-md"
       >
         <h2 className="text-2xl font-bold text-navy mb-4">الأسعار والعروض</h2>

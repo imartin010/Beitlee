@@ -1,13 +1,13 @@
 import type { ProjectContent } from "@/types/project";
-import { mountainViewContent } from "./mountainview";
+import { content as mountainview } from "./mountainview";
 
 /**
- * Registry of all project landing pages.
- * Add a new project: create content/projects/<slug>.ts and add an entry here.
- * The [slug] route will serve it at /<slug> (e.g. /mountainview, /tajcity).
+ * Registry: one entry per project. File name = slug; each file exports `content: ProjectContent`.
+ * Add a new project: create content/projects/<slug>.ts with `export const content: ProjectContent = { ... }`,
+ * then add here: import { content as <slug> } from "./<slug>"; and add <slug> to the object.
  */
 const projects: Record<string, ProjectContent> = {
-  mountainview: mountainViewContent,
+  mountainview,
 };
 
 export function getProjectBySlug(slug: string): ProjectContent | null {

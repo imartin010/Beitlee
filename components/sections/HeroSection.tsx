@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { buildWhatsAppUrl } from "@/lib/utils";
+import { buildProjectWhatsAppUrl } from "@/lib/utils";
 import type { ProjectContent } from "@/types/project";
 
 interface HeroSectionProps {
@@ -12,10 +12,7 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ project }: HeroSectionProps) {
-  const whatsappUrl = buildWhatsAppUrl(
-    project.whatsappNumber,
-    `مرحباً، أريد الاستفسار عن مشروع ${project.projectName}`
-  );
+  const whatsappUrl = buildProjectWhatsAppUrl(project, "inquiry");
 
   return (
     <section className="relative pt-6 pb-16 md:pt-10 md:pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden">

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
+import { fadeInUp } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
 
 interface FAQSectionProps {
@@ -15,9 +16,9 @@ export function FAQSection({ project }: FAQSectionProps) {
   return (
     <SectionWrapper id="faq">
       <motion.h2
-        initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        initial={fadeInUp.initial}
+        whileInView={fadeInUp.animate}
+        viewport={fadeInUp.viewport}
         className="text-2xl font-bold text-navy mb-8 text-center"
       >
         أسئلة شائعة
@@ -26,9 +27,9 @@ export function FAQSection({ project }: FAQSectionProps) {
         {project.faqs.map((faq, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial={fadeInUp.initial}
+            whileInView={fadeInUp.animate}
+            viewport={fadeInUp.viewport}
             transition={{ delay: i * 0.03 }}
             className="rounded-xl border border-navy/10 bg-white overflow-hidden"
           >

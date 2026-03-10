@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
+import { fadeInUp } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
 
 interface LocationSectionProps {
@@ -12,9 +13,9 @@ export function LocationSection({ project }: LocationSectionProps) {
   return (
     <SectionWrapper id="location" className="bg-white rounded-2xl shadow-sm">
       <motion.h2
-        initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        initial={fadeInUp.initial}
+        whileInView={fadeInUp.animate}
+        viewport={fadeInUp.viewport}
         className="text-2xl font-bold text-navy mb-6"
       >
         الموقع والوصول

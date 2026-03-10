@@ -5,26 +5,24 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Textarea } from "@/components/ui/Textarea";
 import type { ProjectContent } from "@/types/project";
-
-const EGYPT_PHONE_REGEX = /^(\+20|0)?1[0-2,5]{1}[0-9]{8}$/;
+import type { NextSearchParams } from "@/types/next";
+import type { LeadFormPayload } from "@/types/lead";
+import { isValidEgyptPhone, normalizeEgyptPhone } from "@/lib/validation";
+import { getSearchParam } from "@/lib/utils";
+import { fadeInUp } from "@/lib/motion";
 
 interface LeadFormSectionProps {
   project: ProjectContent;
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
-
-function getParam(
-  v: string | string[] | undefined
-): string | undefined {
-  if (v == null) return undefined;
-  return Array.isArray(v) ? v[0] : v;
+  searchParams?: NextSearchParams;
 }
 
 export function LeadFormSection({ project, searchParams }: LeadFormSectionProps) {
   const router = useRouter();
-  const utmSource = getParam(searchParams?.utm_source);
-  const utmCampaign = getParam(searchParams?.utm_campaign);
+  const utmSource = getSearchParam(searchParams?.utm_source);
+  const utmCampaign = getSearchParam(searchParams?.utm_campaign);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -37,8 +35,7 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
     const next: Record<string, string> = {};
     if (!name.trim()) next.name = "الاسم مطلوب";
     if (!phone.trim()) next.phone = "رقم الهاتف مطلوب";
-    else if (!EGYPT_PHONE_REGEX.test(phone.replace(/\s/g, "")))
-      next.phone = "رقم هاتف مصري صحيح مطلوب";
+    else if (!isValidEgyptPhone(phone)) next.phone = "رقم هاتف مصري صحيح مطلوب";
     if (!consent) next.consent = "يرجى الموافقة على التواصل";
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -50,22 +47,20 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
     setStatus("loading");
     setErrors({});
 
-    const normalizedPhone = phone.replace(/\s/g, "");
-    const source = [utmSource, utmCampaign].filter(Boolean).join(" | ") || undefined;
+    const payload: LeadFormPayload = {
+      project_slug: project.slug,
+      name: name.trim(),
+      phone: normalizeEgyptPhone(phone),
+      email: email.trim() || undefined,
+      notes: notes.trim() || undefined,
+      source: [utmSource, utmCampaign].filter(Boolean).join(" | ") || undefined,
+    };
 
     try {
-      // POST to API route; server inserts into Supabase leads table (no mock).
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          project_slug: project.slug,
-          name: name.trim(),
-          phone: normalizedPhone,
-          email: email.trim() || undefined,
-          notes: notes.trim() || undefined,
-          source,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
@@ -84,9 +79,9 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
   return (
     <SectionWrapper id="lead-form" className="bg-navy/5 rounded-2xl">
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        initial={fadeInUp.initial}
+        whileInView={fadeInUp.animate}
+        viewport={fadeInUp.viewport}
         className="max-w-xl mx-auto"
       >
         <h2 className="text-2xl font-bold text-navy mb-2">
@@ -100,48 +95,41 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
             <label htmlFor="lead-name" className="block text-sm font-medium text-navy mb-1">
               الاسم *
             </label>
-            <input
+            <Input
               id="lead-name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-xl border border-navy/20 bg-white px-4 py-3 text-foreground focus:border-gold focus:ring-2 focus:ring-gold/20 focus:outline-none"
               placeholder="أدخل اسمك"
               disabled={status === "loading"}
               autoComplete="name"
+              error={errors.name}
             />
-            {errors.name && (
-              <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-            )}
           </div>
           <div>
             <label htmlFor="lead-phone" className="block text-sm font-medium text-navy mb-1">
               رقم الهاتف *
             </label>
-            <input
+            <Input
               id="lead-phone"
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full rounded-xl border border-navy/20 bg-white px-4 py-3 text-foreground focus:border-gold focus:ring-2 focus:ring-gold/20 focus:outline-none"
               placeholder="01xxxxxxxxx"
               disabled={status === "loading"}
               autoComplete="tel"
+              error={errors.phone}
             />
-            {errors.phone && (
-              <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
-            )}
           </div>
           <div>
             <label htmlFor="lead-email" className="block text-sm font-medium text-navy mb-1">
               البريد الإلكتروني (اختياري)
             </label>
-            <input
+            <Input
               id="lead-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl border border-navy/20 bg-white px-4 py-3 text-foreground focus:border-gold focus:ring-2 focus:ring-gold/20 focus:outline-none"
               placeholder="example@email.com"
               disabled={status === "loading"}
               autoComplete="email"
@@ -151,12 +139,11 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
             <label htmlFor="lead-notes" className="block text-sm font-medium text-navy mb-1">
               ملاحظات (اختياري)
             </label>
-            <textarea
+            <Textarea
               id="lead-notes"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={3}
-              className="w-full rounded-xl border border-navy/20 bg-white px-4 py-3 text-foreground focus:border-gold focus:ring-2 focus:ring-gold/20 focus:outline-none resize-none"
               placeholder="أي استفسار إضافي"
               disabled={status === "loading"}
             />

@@ -16,6 +16,16 @@ export function formatPrice(amount: number, currency = "EGP"): string {
 }
 
 /**
+ * Normalize Next.js search param (string | string[] | undefined) to string | undefined.
+ */
+export function getSearchParam(
+  value: string | string[] | undefined
+): string | undefined {
+  if (value == null) return undefined;
+  return Array.isArray(value) ? value[0] : value;
+}
+
+/**
  * Build WhatsApp link with optional pre-filled message.
  */
 export function buildWhatsAppUrl(
@@ -29,4 +39,26 @@ export function buildWhatsAppUrl(
     return `${base}?text=${encodeURIComponent(message.trim())}`
   }
   return base
+}
+
+const WHATSAPP_MESSAGES: Record<
+  "inquiry" | "pricing" | "booking",
+  (projectName: string) => string
+> = {
+  inquiry: (projectName) => `مرحباً، أريد الاستفسار عن مشروع ${projectName}`,
+  pricing: (projectName) =>
+    `مرحباً، أريد معرفة تفاصيل الأسعار والتقسيط لمشروع ${projectName}`,
+  booking: (projectName) =>
+    `مرحباً، أريد الحجز أو الاستفسار عن مشروع ${projectName}`,
+}
+
+/**
+ * Build WhatsApp URL for a project with intent-based pre-filled message.
+ */
+export function buildProjectWhatsAppUrl(
+  project: { whatsappNumber: string; projectName: string },
+  intent: "inquiry" | "pricing" | "booking"
+): string {
+  const message = WHATSAPP_MESSAGES[intent](project.projectName);
+  return buildWhatsAppUrl(project.whatsappNumber, message);
 }

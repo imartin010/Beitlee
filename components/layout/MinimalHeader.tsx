@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { buildWhatsAppUrl } from "@/lib/utils";
+import { buildProjectWhatsAppUrl, buildWhatsAppUrl } from "@/lib/utils";
 
 interface MinimalHeaderProps {
   projectName?: string;
@@ -9,10 +9,9 @@ interface MinimalHeaderProps {
 }
 
 export function MinimalHeader({ projectName, whatsappNumber }: MinimalHeaderProps) {
-  const whatsappUrl = buildWhatsAppUrl(
-    whatsappNumber,
-    projectName ? `مرحباً، أريد الاستفسار عن مشروع ${projectName}` : undefined
-  );
+  const whatsappUrl = projectName
+    ? buildProjectWhatsAppUrl({ whatsappNumber, projectName }, "inquiry")
+    : buildWhatsAppUrl(whatsappNumber);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-navy/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">

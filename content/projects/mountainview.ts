@@ -1,6 +1,7 @@
 import type { ProjectContent } from "@/types/project";
 
-export const mountainViewContent: ProjectContent = {
+/** Convention: each project file exports `content`; slug = filename (e.g. mountainview.ts → slug "mountainview"). */
+export const content: ProjectContent = {
   slug: "mountainview",
   projectName: "Mountain View iCity",
   developer: "iCity",

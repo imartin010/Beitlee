@@ -2,10 +2,11 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getProjectBySlug, getAllProjectSlugs } from "@/content/projects";
 import { LandingPageTemplate } from "@/components/LandingPageTemplate";
+import type { NextSearchParams } from "@/types/next";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<NextSearchParams>;
 }
 
 /**
