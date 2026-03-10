@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ChevronRight, ChevronLeft, X, Phone, MessageCircle } from "lucide-react";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { buildWhatsAppUrl } from "@/lib/utils";
@@ -189,23 +189,25 @@ export function UnitsCardsSection({ project }: { project: ProjectContent }) {
         </button>
       </div>
 
-      {/* Unit details modal — slides up from bottom */}
-      {selectedUnit !== null && unit && (
-        <div
-          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50"
-          onClick={() => setSelectedUnit(null)}
-          role="dialog"
-          aria-modal
-          aria-labelledby="unit-modal-title"
-        >
+      {/* Unit details modal — slides up from bottom, slides down on close */}
+      <AnimatePresence>
+        {selectedUnit !== null && unit ? (
           <motion.div
+            key="unit-modal"
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "tween", duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-            className="relative bg-white rounded-t-3xl sm:rounded-3xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50"
+            onClick={() => setSelectedUnit(null)}
+            role="dialog"
+            aria-modal
+            aria-labelledby="unit-modal-title"
           >
+            <div
+              className="relative bg-white rounded-t-3xl sm:rounded-3xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
             {/* Close button — top left, visible */}
             <button
               type="button"
@@ -285,9 +287,10 @@ export function UnitsCardsSection({ project }: { project: ProjectContent }) {
                 </a>
               </div>
             </div>
+          </div>
           </motion.div>
-        </div>
-      )}
+        ) : null}
+      </AnimatePresence>
     </SectionWrapper>
   );
 }

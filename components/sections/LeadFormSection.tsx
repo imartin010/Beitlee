@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
 import type { ProjectContent } from "@/types/project";
 import type { NextSearchParams } from "@/types/next";
 import type { LeadFormPayload } from "@/types/lead";
@@ -26,9 +25,6 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
   const utmCampaign = getSearchParam(searchParams?.utm_campaign);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [notes, setNotes] = useState("");
-  const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -37,7 +33,6 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
     if (!name.trim()) next.name = "الاسم مطلوب";
     if (!phone.trim()) next.phone = "رقم الهاتف مطلوب";
     else if (!isValidEgyptPhone(phone)) next.phone = "رقم هاتف مصري صحيح مطلوب";
-    if (!consent) next.consent = "يرجى الموافقة على التواصل";
     setErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -52,8 +47,6 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
       project_slug: project.slug,
       name: name.trim(),
       phone: normalizeEgyptPhone(phone),
-      email: email.trim() || undefined,
-      notes: notes.trim() || undefined,
       source: [utmSource, utmCampaign].filter(Boolean).join(" | ") || undefined,
     };
 
@@ -122,49 +115,6 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
               error={errors.phone}
             />
           </div>
-          <div>
-            <label htmlFor="lead-email" className="block text-sm font-medium text-navy mb-1">
-              البريد الإلكتروني (اختياري)
-            </label>
-            <Input
-              id="lead-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="example@email.com"
-              disabled={status === "loading"}
-              autoComplete="email"
-            />
-          </div>
-          <div>
-            <label htmlFor="lead-notes" className="block text-sm font-medium text-navy mb-1">
-              ملاحظات (اختياري)
-            </label>
-            <Textarea
-              id="lead-notes"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={3}
-              placeholder="أي استفسار إضافي"
-              disabled={status === "loading"}
-            />
-          </div>
-          <div className="flex items-start gap-3">
-            <input
-              id="lead-consent"
-              type="checkbox"
-              checked={consent}
-              onChange={(e) => setConsent(e.target.checked)}
-              className="mt-1 rounded border-navy/30 text-gold focus:ring-gold"
-              disabled={status === "loading"}
-            />
-            <label htmlFor="lead-consent" className="text-sm text-muted">
-              أوافق على أن يتم التواصل معي عبر الهاتف أو الواتساب بخصوص العروض والاستفسارات.
-            </label>
-          </div>
-          {errors.consent && (
-            <p className="text-sm text-red-600">{errors.consent}</p>
-          )}
           {errors.form && (
             <p className="text-sm text-red-600">{errors.form}</p>
           )}

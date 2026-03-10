@@ -11,15 +11,23 @@ interface MinimalHeaderProps {
   /** When set (e.g. for mountainview), show this logo instead of the Beitlee link and do not make it clickable. */
   logoSrc?: string;
   logoAlt?: string;
+  /** When true, use a translucent bar so hero video blends through (over hero). */
+  overHero?: boolean;
 }
 
-export function MinimalHeader({ projectName, whatsappNumber, logoSrc, logoAlt }: MinimalHeaderProps) {
+export function MinimalHeader({ projectName, whatsappNumber, logoSrc, logoAlt, overHero }: MinimalHeaderProps) {
   const whatsappUrl = projectName
     ? buildProjectWhatsAppUrl({ whatsappNumber, projectName }, "inquiry")
     : buildWhatsAppUrl(whatsappNumber);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-navy/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+    <header
+      className={
+        overHero
+          ? "sticky top-0 z-40 w-full border-b border-white/20 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50"
+          : "sticky top-0 z-40 w-full border-b border-navy/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80"
+      }
+    >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
         {logoSrc ? (
           <span className="relative inline-block h-8 w-auto">

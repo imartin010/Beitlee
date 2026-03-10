@@ -1,10 +1,9 @@
 "use client";
 
-import { MessageCircle, Tag } from "lucide-react";
+import { Phone, Tag } from "lucide-react";
 import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Button } from "@/components/ui/Button";
-import { buildProjectWhatsAppUrl } from "@/lib/utils";
 import { fadeInUp } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
 
@@ -13,7 +12,7 @@ interface PricingSectionProps {
 }
 
 export function PricingSection({ project }: PricingSectionProps) {
-  const whatsappUrl = buildProjectWhatsAppUrl(project, "pricing");
+  const callUrl = `tel:+${project.whatsappNumber.replace(/\D/g, "")}`;
 
   return (
     <SectionWrapper id="pricing">
@@ -37,13 +36,11 @@ export function PricingSection({ project }: PricingSectionProps) {
           للاستفسار عن الوحدات والأسعار الحالية
         </p>
         <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
+          href={callUrl}
           className="mt-6 inline-flex items-center gap-2"
         >
           <Button size="lg" className="gap-2">
-            <MessageCircle size={18} aria-hidden />
+            <Phone size={18} aria-hidden />
             {project.ctaText}
           </Button>
         </a>

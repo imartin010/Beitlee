@@ -1,9 +1,11 @@
 "use client";
 
-import { MapPin, Map } from "lucide-react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import Image from "next/image";
+import { Map, X, Maximize2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
-import { LocationMap } from "@/components/map/LocationMap";
 import { fadeInUp } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
 
@@ -11,7 +13,72 @@ interface LocationSectionProps {
   project: ProjectContent;
 }
 
+function MasterplanModal({ onClose }: { onClose: () => void }) {
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  const ctaBarHeight = 76;
+
+  return createPortal(
+    <div
+      className="fixed left-0 right-0 top-0 z-9999 flex items-end sm:items-center justify-center bg-black/70"
+      style={{ bottom: ctaBarHeight }}
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ y: "100%" }}
+        animate={{ y: 0 }}
+        exit={{ y: "100%" }}
+        transition={{ type: "tween", duration: 0.32, ease: [0.25, 0.1, 0.25, 1] }}
+        className="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl w-full max-w-4xl flex flex-col border-t border-navy/10 overflow-hidden"
+        style={{ maxHeight: "calc(100vh - 76px - env(safe-area-inset-bottom, 0px))" }}
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal
+        aria-label="خريطة المشروع"
+      >
+        {/* header — white */}
+        <div className="flex items-center justify-between shrink-0 px-4 sm:px-6 py-3 border-b border-navy/10 bg-white">
+          <h2 className="text-xl font-bold text-navy">
+            خريطة المشروع
+          </h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-9 h-9 rounded-full flex items-center justify-center text-navy/70 hover:text-navy hover:bg-navy/10 transition-colors"
+            aria-label="إغلاق"
+          >
+            <X size={20} strokeWidth={2} />
+          </button>
+        </div>
+
+        {/* image */}
+        <div className="flex-1 min-h-0 overflow-auto overscroll-contain bg-navy/5">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/Map.png"
+            alt="Masterplan"
+            draggable={false}
+            className="block w-full h-auto"
+          />
+        </div>
+      </motion.div>
+    </div>,
+    document.body
+  );
+}
+
 export function LocationSection({ project }: LocationSectionProps) {
+  const [masterplanOpen, setMasterplanOpen] = useState(false);
+
   return (
     <SectionWrapper id="location" className="bg-white rounded-2xl shadow-sm">
       <motion.h2
@@ -21,26 +88,37 @@ export function LocationSection({ project }: LocationSectionProps) {
         className="text-2xl font-bold text-navy mb-6 flex items-center gap-2"
       >
         <Map size={24} className="text-gold shrink-0" aria-hidden />
-        الموقع والوصول
+        الموقع و خريطة المشروع
       </motion.h2>
       <p className="text-muted mb-6">{project.location}</p>
-      <ul className="space-y-3 mb-8">
-        {project.nearbyPlaces.map((place, i) => (
-          <motion.li
-            key={place.name}
-            initial={{ opacity: 0, x: -8 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.04 }}
-            className="flex items-center gap-3 text-foreground"
-          >
-            <MapPin size={18} className="shrink-0 text-gold" aria-hidden />
-            <span className="font-medium">{place.name}</span>
-            <span className="text-muted text-sm">— {place.distance}</span>
-          </motion.li>
-        ))}
-      </ul>
-      <LocationMap />
+
+      {/* Thumbnail */}
+      <button
+        type="button"
+        onClick={() => setMasterplanOpen(true)}
+        className="group relative block aspect-video w-full rounded-xl overflow-hidden bg-navy/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+        aria-label="عرض الماستر بلان"
+      >
+        <Image
+          src="/Map.png"
+          alt="خريطة الموقع — Masterplan"
+          fill
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          sizes="(max-width: 768px) 100vw, 672px"
+        />
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 text-navy text-sm font-medium px-4 py-2 rounded-full flex items-center gap-2">
+            <Maximize2 size={16} />
+            Masterplan
+          </span>
+        </div>
+      </button>
+
+      <AnimatePresence>
+        {masterplanOpen && (
+          <MasterplanModal onClose={() => setMasterplanOpen(false)} />
+        )}
+      </AnimatePresence>
     </SectionWrapper>
   );
 }

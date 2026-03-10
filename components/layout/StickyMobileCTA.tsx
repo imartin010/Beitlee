@@ -1,7 +1,7 @@
 "use client";
 
-import { MessageCircle } from "lucide-react";
-import { buildProjectWhatsAppUrl, buildWhatsAppUrl, cn } from "@/lib/utils";
+import { MessageCircle, Phone } from "lucide-react";
+import { buildProjectWhatsAppUrl, buildWhatsAppUrl } from "@/lib/utils";
 
 interface StickyMobileCTAProps {
   whatsappNumber: string;
@@ -17,9 +17,10 @@ export function StickyMobileCTA({
   const whatsappUrl = projectName
     ? buildProjectWhatsAppUrl({ whatsappNumber, projectName }, "inquiry")
     : buildWhatsAppUrl(whatsappNumber);
+  const callUrl = `tel:+${whatsappNumber.replace(/\D/g, "")}`;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-background/95 backdrop-blur border-t border-navy/10 md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-[10000] p-4 bg-background/95 backdrop-blur border-t border-navy/10 md:hidden">
       <div className="max-w-lg mx-auto flex gap-3">
         <a
           href={whatsappUrl}
@@ -31,11 +32,10 @@ export function StickyMobileCTA({
           WhatsApp
         </a>
         <a
-          href="#lead-form"
-          className={cn(
-            "flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-gold text-white py-3 px-4 font-medium text-sm shadow-md hover:opacity-90 transition-opacity"
-          )}
+          href={callUrl}
+          className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-gold text-white py-3 px-4 font-medium text-sm shadow-md hover:opacity-90 transition-opacity"
         >
+          <Phone size={18} aria-hidden />
           {ctaText}
         </a>
       </div>
