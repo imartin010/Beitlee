@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { MessageCircle, MessageSquare } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -31,14 +32,16 @@ export function HeroSection({ project }: HeroSectionProps) {
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy leading-tight">
             {project.headline}
           </h1>
-          <p className="mt-4 text-lg text-muted">{project.subheadline}</p>
-          <p className="mt-3 text-foreground">{project.description}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-              <Button size="lg">{project.ctaText}</Button>
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
+              <Button size="lg" className="gap-2">
+                <MessageCircle size={18} aria-hidden />
+                {project.ctaText}
+              </Button>
             </a>
-            <a href="#lead-form">
-              <Button variant="outline" size="lg">
+            <a href="#lead-form" className="inline-flex items-center gap-2">
+              <Button variant="outline" size="lg" className="gap-2">
+                <MessageSquare size={18} aria-hidden />
                 اطلب استشارة
               </Button>
             </a>
@@ -50,14 +53,26 @@ export function HeroSection({ project }: HeroSectionProps) {
           transition={{ duration: 0.4, delay: 0.1 }}
           className="order-1 md:order-2 relative aspect-[4/3] rounded-2xl overflow-hidden shadow-xl bg-navy/5"
         >
-          <Image
-            src={project.heroImage}
-            alt={project.projectName}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
-            priority
-          />
+          {project.heroVideo ? (
+            <video
+              src={project.heroVideo}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 h-full w-full object-cover"
+              aria-label={project.projectName}
+            />
+          ) : (
+            <Image
+              src={project.heroImage}
+              alt={project.projectName}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority
+            />
+          )}
         </motion.div>
       </div>
     </section>

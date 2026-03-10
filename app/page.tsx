@@ -1,3 +1,4 @@
+import { Building2 } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -9,9 +10,10 @@ export default function Home() {
       </p>
       <Link
         href="/mountainview"
-        className="rounded-xl bg-gold text-white px-6 py-3 font-medium hover:opacity-90 transition-opacity"
+        className="inline-flex items-center gap-2 rounded-xl bg-gold text-white px-6 py-3 font-medium hover:opacity-90 transition-opacity"
       >
-        Mountain View iCity
+        <Building2 size={20} aria-hidden />
+        أليڤا
       </Link>
     </div>
   );

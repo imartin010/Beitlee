@@ -1,5 +1,6 @@
 "use client";
 
+import { Home } from "lucide-react";
 import Link from "next/link";
 
 export function MinimalFooter() {
@@ -10,7 +11,8 @@ export function MinimalFooter() {
           Beitlee — عقارات مصر. للمعلومات والاستفسارات يرجى التواصل عبر النموذج أو واتساب.
         </p>
         <p className="mt-2">
-          <Link href="/" className="text-navy hover:underline">
+          <Link href="/" className="inline-flex items-center justify-center gap-1.5 text-navy hover:underline">
+            <Home size={16} aria-hidden />
             الرئيسية
           </Link>
         </p>

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Cairo } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const cairo = Cairo({
+  variable: "--font-cairo",
+  subsets: ["latin", "arabic"],
 });
 
 export const metadata: Metadata = {
@@ -19,10 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} antialiased min-h-screen bg-background text-foreground`}
-      >
+    <html lang="ar" dir="rtl" className={cairo.variable}>
+      <body className="antialiased min-h-screen bg-background text-foreground">
         {children}
       </body>
     </html>

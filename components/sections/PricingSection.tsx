@@ -1,5 +1,6 @@
 "use client";
 
+import { MessageCircle, Tag } from "lucide-react";
 import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Button } from "@/components/ui/Button";
@@ -22,7 +23,10 @@ export function PricingSection({ project }: PricingSectionProps) {
         viewport={fadeInUp.viewport}
         className="max-w-2xl mx-auto text-center p-8 rounded-2xl bg-white border border-navy/10 shadow-md"
       >
-        <h2 className="text-2xl font-bold text-navy mb-4">الأسعار والعروض</h2>
+        <h2 className="text-2xl font-bold text-navy mb-4 flex items-center justify-center gap-2">
+          <Tag size={24} className="text-gold" aria-hidden />
+          الأسعار والعروض
+        </h2>
         <p className="text-3xl font-bold text-gold mt-2">
           يبدأ من {project.startingPrice}
         </p>
@@ -36,9 +40,12 @@ export function PricingSection({ project }: PricingSectionProps) {
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-6 inline-block"
+          className="mt-6 inline-flex items-center gap-2"
         >
-          <Button size="lg">{project.ctaText}</Button>
+          <Button size="lg" className="gap-2">
+            <MessageCircle size={18} aria-hidden />
+            {project.ctaText}
+          </Button>
         </a>
       </motion.div>
     </SectionWrapper>

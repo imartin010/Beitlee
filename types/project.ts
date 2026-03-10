@@ -33,6 +33,8 @@ export interface ProjectContent {
   subheadline: string
   description: string
   heroImage: string
+  /** Optional hero video URL (e.g. /hero-video.mp4). When set, the hero shows video instead of the image. */
+  heroVideo?: string
   startingPrice: string
   downPayment: string
   installmentYears: number

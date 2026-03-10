@@ -6,6 +6,9 @@
   --navy: #0F2140;
   --gold: #C9982A;
   --muted: #6B7280;
+  /* English: Helvetica Neue; Arabic: Cairo (Cairo before Arial so Arabic uses Cairo, not Arial) */
+  --font-sans-en: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-sans: "Helvetica Neue", Helvetica, var(--font-cairo), Arial, sans-serif;
 }
 
 @theme inline {
@@ -14,12 +17,19 @@
   --color-navy: var(--navy);
   --color-gold: var(--gold);
   --color-muted: var(--muted);
-  --font-sans: var(--font-geist-sans);
   --font-mono: ui-monospace, monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-sans);
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

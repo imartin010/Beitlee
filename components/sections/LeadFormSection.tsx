@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Send } from "lucide-react";
 import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Button } from "@/components/ui/Button";
@@ -170,9 +171,10 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
           <Button
             type="submit"
             size="lg"
-            className="w-full"
+            className="w-full gap-2"
             disabled={status === "loading"}
           >
+            <Send size={18} aria-hidden />
             {status === "loading" ? "جاري الإرسال..." : project.ctaText}
           </Button>
         </form>

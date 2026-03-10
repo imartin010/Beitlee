@@ -1,7 +1,9 @@
 "use client";
 
+import { MapPin, Map } from "lucide-react";
 import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
+import { LocationMap } from "@/components/map/LocationMap";
 import { fadeInUp } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
 
@@ -16,8 +18,9 @@ export function LocationSection({ project }: LocationSectionProps) {
         initial={fadeInUp.initial}
         whileInView={fadeInUp.animate}
         viewport={fadeInUp.viewport}
-        className="text-2xl font-bold text-navy mb-6"
+        className="text-2xl font-bold text-navy mb-6 flex items-center gap-2"
       >
+        <Map size={24} className="text-gold shrink-0" aria-hidden />
         الموقع والوصول
       </motion.h2>
       <p className="text-muted mb-6">{project.location}</p>
@@ -31,18 +34,13 @@ export function LocationSection({ project }: LocationSectionProps) {
             transition={{ delay: i * 0.04 }}
             className="flex items-center gap-3 text-foreground"
           >
-            <span className="w-2 h-2 rounded-full bg-gold shrink-0" />
+            <MapPin size={18} className="shrink-0 text-gold" aria-hidden />
             <span className="font-medium">{place.name}</span>
             <span className="text-muted text-sm">— {place.distance}</span>
           </motion.li>
         ))}
       </ul>
-      <div
-        className="aspect-video rounded-xl bg-navy/10 flex items-center justify-center text-muted"
-        aria-hidden
-      >
-        <span className="text-sm">خريطة — سيتم إضافة الخريطة لاحقاً</span>
-      </div>
+      <LocationMap />
     </SectionWrapper>
   );
 }

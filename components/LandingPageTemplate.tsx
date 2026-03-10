@@ -5,7 +5,9 @@ import type { NextSearchParams } from "@/types/next";
 import { MinimalHeader } from "@/components/layout/MinimalHeader";
 import { MinimalFooter } from "@/components/layout/MinimalFooter";
 import { StickyMobileCTA } from "@/components/layout/StickyMobileCTA";
+import { WindowSplashScreen } from "@/components/WindowSplashScreen";
 import { HeroSection } from "@/components/sections/HeroSection";
+import { UnitsCardsSection } from "@/components/sections/UnitsCardsSection";
 import { HighlightsSection } from "@/components/sections/HighlightsSection";
 import { WhyThisSection } from "@/components/sections/WhyThisSection";
 import { LocationSection } from "@/components/sections/LocationSection";
@@ -26,12 +28,18 @@ interface LandingPageTemplateProps {
 export function LandingPageTemplate({ project, searchParams }: LandingPageTemplateProps) {
   return (
     <>
+      {project.slug === "mountainview" && (
+        <WindowSplashScreen shutterImageSrc="/shutters.png" />
+      )}
       <MinimalHeader
         projectName={project.projectName}
         whatsappNumber={project.whatsappNumber}
+        logoSrc={project.slug === "mountainview" ? "/Mountain View Logo.png" : undefined}
+        logoAlt={project.slug === "mountainview" ? project.projectName : undefined}
       />
       <main className="pb-24 md:pb-0">
         <HeroSection project={project} />
+        {project.slug === "mountainview" && <UnitsCardsSection project={project} />}
         <HighlightsSection project={project} />
         <WhyThisSection project={project} />
         <LocationSection project={project} />

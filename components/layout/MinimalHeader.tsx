@@ -1,14 +1,19 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
+import { MessageCircle } from "lucide-react";
 import { buildProjectWhatsAppUrl, buildWhatsAppUrl } from "@/lib/utils";
 
 interface MinimalHeaderProps {
   projectName?: string;
   whatsappNumber: string;
+  /** When set (e.g. for mountainview), show this logo instead of the Beitlee link and do not make it clickable. */
+  logoSrc?: string;
+  logoAlt?: string;
 }
 
-export function MinimalHeader({ projectName, whatsappNumber }: MinimalHeaderProps) {
+export function MinimalHeader({ projectName, whatsappNumber, logoSrc, logoAlt }: MinimalHeaderProps) {
   const whatsappUrl = projectName
     ? buildProjectWhatsAppUrl({ whatsappNumber, projectName }, "inquiry")
     : buildWhatsAppUrl(whatsappNumber);
@@ -16,16 +21,30 @@ export function MinimalHeader({ projectName, whatsappNumber }: MinimalHeaderProp
   return (
     <header className="sticky top-0 z-40 w-full border-b border-navy/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-        <Link href="/" className="font-semibold text-navy text-lg">
-          Beitlee
-        </Link>
+        {logoSrc ? (
+          <span className="relative inline-block h-8 w-auto">
+            <Image
+              src={logoSrc}
+              alt={logoAlt ?? projectName ?? "Logo"}
+              width={120}
+              height={32}
+              className="h-8 w-auto object-contain object-left"
+              unoptimized
+            />
+          </span>
+        ) : (
+          <Link href="/" className="font-semibold text-navy text-lg">
+            Beitlee
+          </Link>
+        )}
         <a
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 rounded-xl bg-[#25D366] text-white px-4 py-2 text-sm font-medium hover:bg-[#20bd5a] transition-colors"
         >
-          <span aria-hidden>WhatsApp</span>
+          <MessageCircle size={18} aria-hidden />
+          <span>WhatsApp</span>
         </a>
       </div>
     </header>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { fadeInUp } from "@/lib/motion";
@@ -40,14 +41,13 @@ export function FAQSection({ project }: FAQSectionProps) {
               aria-expanded={openIndex === i}
             >
               <span>{faq.question}</span>
-              <span
-                className={`shrink-0 text-xl transition-transform ${
+              <ChevronDown
+                size={20}
+                className={`shrink-0 transition-transform ${
                   openIndex === i ? "rotate-180" : ""
                 }`}
                 aria-hidden
-              >
-                ▼
-              </span>
+              />
             </button>
             <AnimatePresence initial={false}>
               {openIndex === i && (

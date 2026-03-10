@@ -1,5 +1,6 @@
 "use client";
 
+import { MessageCircle, MessageSquare } from "lucide-react";
 import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Button } from "@/components/ui/Button";
@@ -33,8 +34,9 @@ export function FinalCTASection({ project }: FinalCTASectionProps) {
             <Button
               variant="primary"
               size="lg"
-              className="bg-gold hover:bg-amber-500 text-white border-0"
+              className="gap-2 bg-gold hover:bg-amber-500 text-white border-0"
             >
+              <MessageCircle size={18} aria-hidden />
               تواصل عبر واتساب
             </Button>
           </a>
@@ -42,8 +44,9 @@ export function FinalCTASection({ project }: FinalCTASectionProps) {
             <Button
               variant="outline"
               size="lg"
-              className="border-2 border-white text-white hover:bg-white hover:text-navy"
+              className="gap-2 border-2 border-white text-white hover:bg-white hover:text-navy"
             >
+              <MessageSquare size={18} aria-hidden />
               اطلب استشارة
             </Button>
           </a>
