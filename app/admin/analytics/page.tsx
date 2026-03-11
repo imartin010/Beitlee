@@ -3,6 +3,7 @@ import { BarChart3, Eye, MousePointerClick, MessageCircle, Phone, LayoutPanelTop
 import { createServerClient } from "@/lib/supabase";
 import { parsePeriod, getDateRangeForPeriod, getPeriodLabel } from "@/lib/admin-period";
 import { PeriodSelector } from "../PeriodSelector";
+import { ResetAnalyticsButton } from "./ResetAnalyticsButton";
 
 interface PageProps {
   searchParams: Promise<{ period?: string }>;
@@ -54,9 +55,12 @@ export default async function AdminAnalyticsPage({ searchParams }: PageProps) {
           <BarChart3 size={28} className="text-emerald-600 shrink-0" aria-hidden />
           Analytics
         </h1>
-        <Suspense fallback={<div className="h-9 w-32 rounded-lg bg-navy/10 animate-pulse" />}>
-          <PeriodSelector />
-        </Suspense>
+        <div className="flex flex-wrap items-center gap-4">
+          <Suspense fallback={<div className="h-9 w-32 rounded-lg bg-navy/10 animate-pulse" />}>
+            <PeriodSelector />
+          </Suspense>
+          <ResetAnalyticsButton />
+        </div>
       </div>
       <p className="text-muted text-sm mb-6">{periodLabel} — page visits and button clicks.</p>
 
