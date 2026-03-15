@@ -37,6 +37,10 @@ export interface ProjectContent {
   heroVideo?: string
   /** Optional smaller hero video for mobile (e.g. /hero-video-mobile.webm). When set, used on viewport <= 768px. */
   heroVideoMobile?: string
+  /** Optional MP4 fallback for Safari (e.g. /hero-video.mp4). Safari does not support WebM; use this so video plays in production. */
+  heroVideoMp4?: string
+  /** Optional MP4 fallback for Safari on mobile (e.g. /hero-video-mobile.mp4). */
+  heroVideoMobileMp4?: string
   startingPrice: string
   downPayment: string
   installmentYears: number

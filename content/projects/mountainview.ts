@@ -14,6 +14,8 @@ export const content: ProjectContent = {
   heroImage: "https://placehold.co/800x600/0F2140/FAFAF9?text=Aliva",
   heroVideo: "/hero-video.webm",
   heroVideoMobile: "/hero-video-mobile.webm",
+  heroVideoMp4: "/hero-video.mp4",
+  heroVideoMobileMp4: "/hero-video-mobile.mp4",
   startingPrice: "١٠،٥٠٠،٠٠٠ جنيه",
   downPayment: "١٠٠ الف جنيه",
   installmentYears: 10,

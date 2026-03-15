@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { MessageCircle, MessageSquare, Phone } from "lucide-react";
 import { motion } from "framer-motion";
@@ -19,6 +20,19 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
   const phone = contactPhone ?? project.whatsappNumber;
   const callUrl = `tel:+${phone.replace(/\D/g, "")}`;
   const hasVideo = !!project.heroVideo;
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !hasVideo) return;
+    const play = () => {
+      video.muted = true;
+      video.play().catch(() => {});
+    };
+    play();
+    video.addEventListener("canplay", play);
+    return () => video.removeEventListener("canplay", play);
+  }, [hasVideo]);
 
   if (hasVideo) {
     return (
@@ -29,12 +43,13 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
         {/* Full-bleed video behind header and hero */}
         <div className="absolute inset-0 z-0">
           <video
+            ref={videoRef}
             poster="/hero-poster.avif"
             autoPlay
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="auto"
             className="absolute inset-0 h-full w-full object-cover"
             aria-label={project.projectName}
           >
@@ -42,6 +57,10 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
               <source src={project.heroVideoMobile} type="video/webm" media="(max-width: 768px)" />
             )}
             <source src={project.heroVideo} type="video/webm" />
+            {project.heroVideoMobileMp4 && (
+              <source src={project.heroVideoMobileMp4} type="video/mp4" media="(max-width: 768px)" />
+            )}
+            {project.heroVideoMp4 && <source src={project.heroVideoMp4} type="video/mp4" />}
           </video>
           {/* Gradient so text on the right (RTL) is readable; light overlay on the right */}
           <div
