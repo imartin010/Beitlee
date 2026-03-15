@@ -134,7 +134,7 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
       setScrollBounds({ atStart: true, atEnd: true });
       return;
     }
-    const isRtl = el.getComputedStyle(el).direction === "rtl";
+    const isRtl = typeof window !== "undefined" && window.getComputedStyle(el).direction === "rtl";
     const atStart = isRtl ? scrollLeft >= -SCROLL_EPS : scrollLeft <= SCROLL_EPS;
     const atEnd = isRtl ? scrollLeft <= -maxScroll + SCROLL_EPS : scrollLeft >= maxScroll - SCROLL_EPS;
     setScrollBounds({ atStart, atEnd });
