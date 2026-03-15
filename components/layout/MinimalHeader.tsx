@@ -59,7 +59,7 @@ export function MinimalHeader({ projectSlug, projectName, whatsappNumber, whatsa
         >
           {projectSlug === "mountainview" ? (
             <Image
-              src="/mountainview-emblem-white.png"
+              src="/mountainview-emblem-white.webp"
               alt=""
               width={18}
               height={18}

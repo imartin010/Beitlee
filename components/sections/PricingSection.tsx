@@ -46,7 +46,7 @@ export function PricingSection({ project, contactPhone }: PricingSectionProps) {
         >
           <Button size="lg" className="gap-2">
             {project.slug === "mountainview" ? (
-              <img src="/mountainview-emblem-white.png" alt="" aria-hidden className="w-7 h-7 object-contain" />
+              <img src="/mountainview-emblem-white.webp" alt="" aria-hidden className="w-7 h-7 object-contain" />
             ) : (
               <Phone size={18} aria-hidden />
             )}

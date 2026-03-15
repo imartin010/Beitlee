@@ -67,14 +67,14 @@ export function LandingPageTemplate({
   return (
     <>
       {project.slug === "mountainview" && (
-        <WindowSplashScreen shutterImageSrc="/shutters.png" />
+        <WindowSplashScreen shutterImageSrc="/shutters.webp" />
       )}
       <MinimalHeader
         projectSlug={project.slug}
         projectName={project.projectName}
         whatsappNumber={contactWhatsapp}
         whatsappInquiryMessage={project.whatsappInquiryMessage}
-        logoSrc={project.slug === "mountainview" ? "/Mountain View Logo.png" : undefined}
+        logoSrc={project.slug === "mountainview" ? "/Mountain View Logo.webp" : undefined}
         logoAlt={project.slug === "mountainview" ? project.projectName : undefined}
         overHero={!!project.heroVideo}
       />

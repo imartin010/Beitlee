@@ -99,7 +99,7 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
                 <Button size="lg" className="gap-2">
                   {project.slug === "mountainview" ? (
                     <Image
-                      src="/mountainview-emblem-white.png"
+                      src="/mountainview-emblem-white.webp"
                       alt=""
                       width={18}
                       height={18}
@@ -116,7 +116,7 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
                 <Button variant="secondary" size="lg" className="gap-2">
                   {project.slug === "mountainview" ? (
                     <Image
-                      src="/mountainview-emblem-gold.png"
+                      src="/mountainview-emblem-gold.webp"
                       alt=""
                       width={18}
                       height={18}
@@ -164,7 +164,7 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
               <Button size="lg" className="gap-2">
                 {project.slug === "mountainview" ? (
                   <Image
-                    src="/mountainview-emblem-white.png"
+                    src="/mountainview-emblem-white.webp"
                     alt=""
                     width={18}
                     height={18}
@@ -181,7 +181,7 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
               <Button variant="secondary" size="lg" className="gap-2">
                 {project.slug === "mountainview" ? (
                   <Image
-                    src="/mountainview-emblem-gold.png"
+                    src="/mountainview-emblem-gold.webp"
                     alt=""
                     width={18}
                     height={18}

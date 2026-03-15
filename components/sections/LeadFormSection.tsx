@@ -130,7 +130,7 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
             disabled={status === "loading"}
           >
             {project.slug === "mountainview" ? (
-              <img src="/mountainview-emblem-white.png" alt="" aria-hidden className="w-7 h-7 object-contain" />
+              <img src="/mountainview-emblem-white.webp" alt="" aria-hidden className="w-7 h-7 object-contain" />
             ) : (
               <Send size={18} aria-hidden />
             )}
