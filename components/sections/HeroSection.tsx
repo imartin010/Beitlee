@@ -76,8 +76,8 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
     const video = videoRef.current;
     if (!video || !hasVideo) return;
 
-    // Required for inline playback on older iOS
     video.setAttribute("webkit-playsinline", "true");
+    video.setAttribute("fetchpriority", "high");
 
     const tryPlay = () => {
       if (video.paused) {
@@ -135,9 +135,8 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
             - MP4 listed BEFORE WebM so iOS/Safari picks the correct format immediately
               instead of scanning past WebM entries it cannot play.
             - Each format has a mobile variant (max-width: 768px) for smaller file sizes.
-            - preload="auto" + fetchPriority="high" start buffering as early as possible.
+            - preload="auto"; fetchpriority is set in effect for LCP hint.
           */}
-          {/* @ts-expect-error fetchpriority is valid on video for LCP; React types are incomplete */}
           <video
             ref={videoRef}
             autoPlay
@@ -145,7 +144,6 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
             loop
             playsInline
             preload="auto"
-            fetchPriority="high"
             className="absolute inset-0 h-full w-full object-cover"
             aria-label={project.projectName}
           >
