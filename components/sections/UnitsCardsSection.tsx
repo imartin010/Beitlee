@@ -199,7 +199,7 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
         {/* Slide track */}
         <div
           ref={scrollRef}
-          className="flex gap-5 overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory py-2 -mx-4 px-4 md:-mx-6 md:px-6 scrollbar-hide"
+          className="flex gap-5 overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory py-2 -mx-4 ps-4 pe-0 md:-mx-6 md:ps-6 md:pe-0 scrollbar-hide"
           aria-label="قائمة الوحدات — اسحب لعرض البطاقات"
         >
           {[1, 2, 3].map((i) => (
