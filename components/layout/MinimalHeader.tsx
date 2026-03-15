@@ -69,7 +69,7 @@ export function MinimalHeader({ projectSlug, projectName, whatsappNumber, whatsa
           ) : (
             <MessageCircle size={18} aria-hidden />
           )}
-          <span>WhatsApp</span>
+          <span>واتســاب</span>
         </a>
       </div>
     </header>
