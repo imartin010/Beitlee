@@ -125,6 +125,8 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
   const [modalImageError, setModalImageError] = useState(false);
   const [scrollBounds, setScrollBounds] = useState({ atStart: true, atEnd: false });
 
+  const snapToBoundsRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const updateScrollBounds = () => {
     const el = scrollRef.current;
     if (!el) return;
@@ -138,6 +140,25 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
     const atStart = isRtl ? scrollLeft >= -SCROLL_EPS : scrollLeft <= SCROLL_EPS;
     const atEnd = isRtl ? scrollLeft <= -maxScroll + SCROLL_EPS : scrollLeft >= maxScroll - SCROLL_EPS;
     setScrollBounds({ atStart, atEnd });
+
+    // When scroll settles, snap to exact end/start so no gap appears beside the last or first card
+    if (snapToBoundsRef.current) clearTimeout(snapToBoundsRef.current);
+    snapToBoundsRef.current = setTimeout(() => {
+      snapToBoundsRef.current = null;
+      const el2 = scrollRef.current;
+      if (!el2) return;
+      const { scrollLeft: sl, scrollWidth: sw, clientWidth: cw } = el2;
+      const max = sw - cw;
+      if (max <= 0) return;
+      const rtl = typeof window !== "undefined" && window.getComputedStyle(el2).direction === "rtl";
+      if (rtl) {
+        if (sl > -SCROLL_EPS && sl < 0) el2.scrollLeft = 0;
+        else if (sl < -max + SCROLL_EPS && sl > -max - SCROLL_EPS) el2.scrollLeft = -max;
+      } else {
+        if (sl < SCROLL_EPS && sl >= 0) el2.scrollLeft = 0;
+        else if (sl > max - SCROLL_EPS && sl < max + SCROLL_EPS) el2.scrollLeft = max;
+      }
+    }, 150);
   };
 
   useEffect(() => {
@@ -148,6 +169,7 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
     const ro = new ResizeObserver(updateScrollBounds);
     ro.observe(el);
     return () => {
+      if (snapToBoundsRef.current) clearTimeout(snapToBoundsRef.current);
       el.removeEventListener("scroll", updateScrollBounds);
       ro.disconnect();
     };
