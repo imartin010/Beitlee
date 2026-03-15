@@ -79,8 +79,8 @@ function UnitCard({
               alt=""
               fill
               className="object-cover"
-              sizes="(max-width: 640px) 50vw, 280px"
-              quality={82}
+              sizes="(max-width: 640px) 50vw, (max-width: 768px) 280px, 380px"
+              quality={75}
               onError={() => setImageError(true)}
             />
           ) : (
@@ -293,7 +293,7 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
                   fill
                   className="object-cover"
                   sizes="(max-width: 448px) 100vw, 448px"
-                  quality={82}
+                  quality={75}
                   onError={() => setModalImageError(true)}
                 />
               ) : (

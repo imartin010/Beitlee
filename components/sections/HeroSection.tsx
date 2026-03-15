@@ -50,6 +50,7 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
             loop
             playsInline
             preload="auto"
+            fetchPriority="high"
             className="absolute inset-0 h-full w-full object-cover"
             aria-label={project.projectName}
           >
