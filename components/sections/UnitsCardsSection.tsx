@@ -115,12 +115,43 @@ interface UnitsCardsSectionProps {
   contactWhatsapp?: string;
 }
 
+const SCROLL_EPS = 2;
+
 export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: UnitsCardsSectionProps) {
   const phone = contactPhone ?? project.whatsappNumber;
   const whatsapp = contactWhatsapp ?? project.whatsappNumber;
   const scrollRef = useRef<HTMLDivElement>(null);
   const [selectedUnit, setSelectedUnit] = useState<number | null>(null);
   const [modalImageError, setModalImageError] = useState(false);
+  const [scrollBounds, setScrollBounds] = useState({ atStart: true, atEnd: false });
+
+  const updateScrollBounds = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    const maxScroll = scrollWidth - clientWidth;
+    if (maxScroll <= 0) {
+      setScrollBounds({ atStart: true, atEnd: true });
+      return;
+    }
+    const isRtl = el.getComputedStyle(el).direction === "rtl";
+    const atStart = isRtl ? scrollLeft >= -SCROLL_EPS : scrollLeft <= SCROLL_EPS;
+    const atEnd = isRtl ? scrollLeft <= -maxScroll + SCROLL_EPS : scrollLeft >= maxScroll - SCROLL_EPS;
+    setScrollBounds({ atStart, atEnd });
+  };
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    updateScrollBounds();
+    el.addEventListener("scroll", updateScrollBounds, { passive: true });
+    const ro = new ResizeObserver(updateScrollBounds);
+    ro.observe(el);
+    return () => {
+      el.removeEventListener("scroll", updateScrollBounds);
+      ro.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     if (selectedUnit !== null) setModalImageError(false);
@@ -143,6 +174,8 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
   function scroll(direction: "prev" | "next") {
     const el = scrollRef.current;
     if (!el) return;
+    if (direction === "next" && scrollBounds.atEnd) return;
+    if (direction === "prev" && scrollBounds.atStart) return;
     const cardWidth = el.offsetWidth * 0.85 + 20;
     const offset = direction === "next" ? -cardWidth : cardWidth;
     el.scrollBy({ left: offset, behavior: "smooth" });
@@ -179,20 +212,22 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
             />
           ))}
         </div>
-        {/* Left / Right arrows — show on all screens so users know it's scrollable */}
+        {/* Left / Right arrows — show on all screens; disabled at scroll bounds to avoid overflow bug */}
         <button
           type="button"
           onClick={() => scroll("prev")}
-          className="absolute top-1/2 -translate-y-1/2 right-0 w-11 h-11 md:w-11 md:h-11 rounded-full bg-white/95 shadow-md border border-navy/10 flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors z-10"
+          disabled={scrollBounds.atStart}
           aria-label="البطاقة السابقة"
+          className="absolute top-1/2 -translate-y-1/2 right-0 w-11 h-11 md:w-11 md:h-11 rounded-full bg-white/95 shadow-md border border-navy/10 flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors z-10 disabled:opacity-40 disabled:pointer-events-none"
         >
           <ChevronRight size={20} />
         </button>
         <button
           type="button"
           onClick={() => scroll("next")}
-          className="absolute top-1/2 -translate-y-1/2 left-0 w-11 h-11 md:w-11 md:h-11 rounded-full bg-white/95 shadow-md border border-navy/10 flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors z-10"
+          disabled={scrollBounds.atEnd}
           aria-label="البطاقة التالية"
+          className="absolute top-1/2 -translate-y-1/2 left-0 w-11 h-11 md:w-11 md:h-11 rounded-full bg-white/95 shadow-md border border-navy/10 flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors z-10 disabled:opacity-40 disabled:pointer-events-none"
         >
           <ChevronLeft size={20} />
         </button>
